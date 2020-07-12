@@ -1,0 +1,45 @@
+Setup:
+to download go to: https://www.youtube.com/watch?v=V9DWKbalbWQ&list=PLZMCUe-drnUdWl1APlgwaRxZbHEZaqZp9&index=2
+tutorials from rabbitmq official site go to: https://www.rabbitmq.com/getstarted.html
+explaining tutorial blog: 
+	https://www.cloudamqp.com/blog/2015-05-18-part1-rabbitmq-for-beginners-what-is-rabbitmq.html
+	https://www.cloudamqp.com/blog/2015-05-27-part3-rabbitmq-for-beginners_the-management-interface.html
+	https://www.cloudamqp.com/blog/2015-09-03-part4-rabbitmq-for-beginners-exchanges-routing-keys-bindings.html#:~:text=Exchanges%20are%20message%20routing%20agents,a%20queue%20to%20an%20exchange.
+
+Definitions:
+exchange - message routing agent, defined by the virtual host within RabbitMQ. 
+	An exchange is responsible for routing the messages to different queues with the help of header attributes, bindings, and routing keys.
+	there are 3 types of exchanges:
+	1. Direct - The message is routed to the queues whose binding key exactly matches the routing key of the message.
+	2. Topic - The topic exchange does a wildcard match between the routing key and the routing pattern specified in the binding.
+	   The routing key must be a list of words, delimited by a period (.). Examples are agreements.us and agreements.eu.stockholm 
+	   which in this case identifies agreements that are set up for a company with offices in lots of different locations. 
+	   The routing patterns may contain an asterisk (“*”) to match a word in a specific position of the routing key 
+	   (e.g., a routing pattern of "agreements.*.*.b.*" only match routing keys where the first word is "agreements" 
+	   and the fourth word is "b"). A pound symbol (“#”) indicates a match of zero or more words 
+	   (e.g., a routing pattern of "agreements.eu.berlin.#" matches any routing keys beginning with "agreements.eu.berlin").
+	   example: A message with routing key agreements.eu.berlin is sent to the exchange agreements. 
+	   The messages are routed to the queue berlin_agreements because the routing pattern of "agreements.eu.berlin.#" 
+	   matches the routing keys beginning with "agreements.eu.berlin". The message is also routed to the queue all_agreements 
+	   because the routing key (agreements.eu.berlin) matches the routing pattern (agreements.#).
+	3. Fanout - A fanout exchange routes messages to all of the queues bound to it regardless of routing keys or pattern matching 
+	   as with direct and topic exchanges. The keys provided will simply be ignored.  
+	4. Headers - A headers exchange routes messages based on arguments containing headers and optional values. 
+	   Headers exchanges are very similar to topic exchanges, but route messages based on header values instead of routing keys. 
+	   A message matches if the value of the header equals the value specified upon binding.
+       A special argument named "x-match", added in the binding between exchange and queue, specifies if all headers must match or just one. 
+       Either any common header between the message and the binding count as a match, or all the headers referenced in the binding 
+       need to be present in the message for it to match. The "x-match" property can have two different values: "any" or "all", 
+       where "all" is the default value. A value of "all" means all header pairs (key, value) must match, 
+       while value of "any" means at least one of the header pairs must match.
+       
+binding - a "link" that you set up to bind a queue to an exchange
+routing key - a message attribute the exchange looks at when deciding how to route the message to queues (depending on exchange type).
+Users - Users can be added from the management interface and every user can be assigned permissions such as rights to read, 
+	write and configure privileges. Users can also be assigned permissions to specific virtual hosts.
+Vhost, virtual host - Virtual hosts provide a way to segregate applications using the same RabbitMQ instance. 
+	Different users can have different access privileges to different vhost 
+	and queues and exchanges can be created so they only exist in one vhost.
+Cluster - A cluster consists of a set of connected computers that work together. If the RabbitMQ instance consisting 
+	of more than one node - it is called a RabbitMQ cluster. A cluster is a group of nodes i.e., a group of computers.
+Node - A node is a single computer the RabbitMQ cluster.
